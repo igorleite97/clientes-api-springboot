@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
  * para garantir que o seed funcione mesmo sem conexão à internet.
  *
  * Os CPFs usados são matematicamente válidos (algoritmo dos dois dígitos
- * verificadores) — podem ser testados na validação sem erro.
+ * verificadores), podem ser testados na validação sem erro.
  */
 @Slf4j
 @Component
@@ -54,7 +54,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     /**
-     * João — cobre: celular + comercial, dois e-mails, endereço de SP.
+     * João / cobre: celular + comercial, dois e-mails, endereço de SP.
      * CPF: 529.982.247-25
      */
     private void salvarJoao() {

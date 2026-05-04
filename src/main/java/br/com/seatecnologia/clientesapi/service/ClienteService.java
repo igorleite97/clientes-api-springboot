@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 /**
- * Camada de negócio — aqui vivem as regras do desafio.
+ * Camada de negócio, aqui vivem as regras do desafio.
  *
  * Responsabilidades:
  *   1. Orquestrar a consulta ao ViaCEP e mesclar com os dados do usuário

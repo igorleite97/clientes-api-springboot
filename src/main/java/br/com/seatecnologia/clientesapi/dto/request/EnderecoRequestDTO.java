@@ -8,7 +8,7 @@ import lombok.Setter;
 /**
  * DTO de entrada para o endereço do cliente.
  *
- * Apenas o CEP é obrigatório na entrada — os demais campos
+ * Apenas o CEP é obrigatório na entrada, os demais campos
  * são preenchidos automaticamente via ViaCEP no service.
  *
  * O usuário PODE sobrescrever qualquer campo que veio da ViaCEP:
@@ -16,8 +16,8 @@ import lombok.Setter;
  * usamos o que a ViaCEP retornou.
  *
  * CEP aceita com ou sem máscara:
- *   - "01310-100" ✓
- *   - "01310100"  ✓
+ *   - "01310-100" ok
+ *   - "01310100"  ok
  * O service remove a máscara antes de persistir.
  */
 @Getter

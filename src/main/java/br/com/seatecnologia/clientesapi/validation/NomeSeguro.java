@@ -12,8 +12,7 @@ import java.lang.annotation.Target;
 /**
  * Garante que o nome não contém caracteres maliciosos (XSS/injeção).
  *
- * Isso é uma das dicas de segurança do desafio — e diferencia quem
- * só faz o CRUD funcionar de quem pensa em segurança de verdade.
+ * Isso é uma das dicas de segurança do desafio
  */
 @Documented
 @Constraint(validatedBy = NomeSeguroValidator.class)

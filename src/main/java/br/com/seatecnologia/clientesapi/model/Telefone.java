@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Cada cliente pode ter múltiplos telefones — por isso é uma entity separada.
+ * Cada cliente pode ter múltiplos telefones, por isso é uma entity separada.
  *
  * O número é persistido SEM máscara (só dígitos).
  * A máscara é aplicada apenas no DTO de resposta, conforme o tipo:

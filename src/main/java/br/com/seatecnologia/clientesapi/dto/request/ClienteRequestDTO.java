@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * DTO de entrada para criar ou atualizar um cliente.
  *
- * Cada campo aqui é validado ANTES de chegar no service —
+ * Cada campo aqui é validado ANTES de chegar no service,
  * se algo estiver errado, o Spring retorna 400 com o erro específico.
  *
  * CPF: aceita com ou sem máscara (ex: 123.456.789-01 ou 12345678901).

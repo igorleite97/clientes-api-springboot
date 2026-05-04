@@ -32,7 +32,7 @@ import java.util.List;
  *   - POST, PUT, DELETE → somente ADMIN
  *
  * Todos os dados sensíveis (CPF, CEP, telefone) já chegam mascarados
- * no response — a limpeza/mascaramento é responsabilidade do service.
+ * no response, a limpeza/mascaramento é responsabilidade do service.
  */
 @RestController
 @RequestMapping("/api/clientes")

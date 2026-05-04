@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Repositório JPA para a entidade Cliente.
  *
- * O Spring Data gera a implementação em tempo de execução —
+ * O Spring Data gera a implementação em tempo de execução
  * não preciso escrever nenhuma query para os métodos básicos.
  *
  * Os métodos derivados (existsByCpf, findByCpf) são traduzidos

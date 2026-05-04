@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Configura o Swagger/OpenAPI com autenticação Basic Auth.
  *
- * Com isso, o botão "Authorize" aparece no Swagger UI —
+ * Com isso, o botão "Authorize" aparece no Swagger UI
  * o avaliador pode testar os endpoints direto pelo navegador
  * sem precisar de Postman ou curl.
  *
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "Clientes API",
                 version = "1.0.0",
-                description = "API REST para gerenciamento de clientes — Desafio SEA Tecnologia"
+                description = "API REST para gerenciamento de clientes - Desafio SEA Tecnologia"
         )
 )
 @SecurityScheme(

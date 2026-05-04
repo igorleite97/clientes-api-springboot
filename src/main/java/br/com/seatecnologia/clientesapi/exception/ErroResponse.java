@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Modelo padronizado de resposta de erro.
  *
- * Toda exceção tratada pelo GlobalExceptionHandler retorna esse formato,
+ * Toda exceção tratada pelo GlobalExceptionHandler retorna esse formato
  * o que facilita muito o tratamento no front-end — sempre o mesmo contrato.
  *
  * O campo 'detalhes' só aparece no JSON quando preenchido (erros de validação),

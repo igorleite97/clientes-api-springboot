@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 /**
  * Implementação do algoritmo de validação de CPF.
  *
- * O CPF chega aqui já sem máscara (só dígitos) — a limpeza foi feita no service.
+ * O CPF chega aqui já sem máscara (só dígitos), a limpeza foi feita no service.
  *
  * O algoritmo funciona assim:
  *   1. Verifica se tem 11 dígitos

@@ -8,7 +8,7 @@ import lombok.Setter;
 /**
  * DTO de entrada para e-mail do cliente.
  *
- * A anotação @Email do Jakarta Validation valida o formato RFC —
+ * A anotação @Email do Jakarta Validation valida o formato RFC,
  * inclui casos como domínios inválidos e ausência de "@".
  */
 @Getter

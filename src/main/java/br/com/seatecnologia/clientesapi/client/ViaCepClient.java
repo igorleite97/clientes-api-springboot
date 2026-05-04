@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * Client HTTP declarativo para a API pública ViaCEP.
  *
  * O Feign transforma essa interface em uma implementação real em tempo de execução.
- * Não preciso de RestTemplate, WebClient nem HttpURLConnection — só defino o contrato.
+ * Não preciso de RestTemplate, WebClient nem HttpURLConnection, só defino o contrato.
  *
  * URL base vem do application.properties:
  *   spring.cloud.openfeign.client.config.viacep.url=https://viacep.com.br

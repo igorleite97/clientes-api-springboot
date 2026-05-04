@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
  *   private String cpf;
  *
  * Ela valida tanto o formato (11 dígitos) quanto o algoritmo matemático
- * que verifica se o CPF é matematicamente válido — não só se tem 11 números.
+ * que verifica se o CPF é matematicamente válido, não só se tem 11 números.
  */
 @Documented
 @Constraint(validatedBy = CPFValidator.class)

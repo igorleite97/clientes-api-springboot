@@ -17,7 +17,7 @@ import java.util.Map;
  * Centralizador de tratamento de exceções.
  *
  * Sem essa classe, qualquer exceção não tratada retornaria um JSON padrão
- * do Spring com stacktrace — péssimo para segurança e usabilidade.
+ * do Spring com stacktrace, péssimo para segurança e usabilidade.
  *
  * @RestControllerAdvice: intercepta exceções de todos os controllers
  * e retorna a resposta no formato ErroResponse, sempre consistente.

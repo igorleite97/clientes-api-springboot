@@ -9,8 +9,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  *
  * @EnableFeignClients instrui o Spring a escanear as interfaces
  * anotadas com @FeignClient (como o ViaCepClient que vamos criar).
- * Sem essa anotação o Feign simplesmente não funciona — erro silencioso
- * que só aparece quando você tenta injetar o client em algum service.
+ * Sem essa anotação o Feign simplesmente não funciona, erro silencioso
+ * que só aparece quando tenta injetar o client em algum service.
  */
 @SpringBootApplication
 @EnableFeignClients

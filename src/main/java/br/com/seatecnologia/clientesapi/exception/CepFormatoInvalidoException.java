@@ -1,7 +1,7 @@
 package br.com.seatecnologia.clientesapi.exception;
 
 /**
- * Lançada quando o CEP informado tem um formato inválido —
+ * Lançada quando o CEP informado tem um formato inválido,
  * ou seja, não possui exatamente 8 dígitos numéricos após remover a máscara.
  *
  * Exemplos que disparam essa exceção:
