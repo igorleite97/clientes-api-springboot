@@ -1,5 +1,6 @@
 package br.com.seatecnologia.clientesapi.exception;
 
+import feign.FeignException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -79,16 +80,53 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * CEP não encontrado na ViaCEP → 422 Unprocessable Entity.
-     * O formato estava certo, mas o conteúdo não é válido.
+     * CEP com formato errado (ex: "7151618" — 7 dígitos em vez de 8) → 400.
+     *
+     * Diferente do CepInvalidoException: aqui o problema é no formato da entrada,
+     * não no conteúdo. Por isso é 400 (Bad Request) e não 422.
+     */
+    @ExceptionHandler(CepFormatoInvalidoException.class)
+    public ResponseEntity<ErroResponse> handleCepFormatoInvalido(CepFormatoInvalidoException ex) {
+
+        ErroResponse resposta = new ErroResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Formato de CEP inválido",
+                ex.getMessage()
+        );
+
+        return ResponseEntity.badRequest().body(resposta);
+    }
+
+    /**
+     * CEP com formato correto, mas não encontrado na base da ViaCEP → 422.
+     * O dado veio no formato certo, mas não é um CEP existente.
      */
     @ExceptionHandler(CepInvalidoException.class)
     public ResponseEntity<ErroResponse> handleCepInvalido(CepInvalidoException ex) {
 
         ErroResponse resposta = new ErroResponse(
                 HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                "CEP inválido",
+                "CEP não encontrado",
                 ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(resposta);
+    }
+
+    /**
+     * Segurança adicional: captura FeignException que eventualmente escape do service.
+     *
+     * Em condições normais essa exceção nunca chega aqui — o service já a converte
+     * em CepInvalidoException. Mas se em algum refactor futuro uma chamada Feign
+     * for adicionada sem try-catch, esse handler evita o 500 genérico.
+     */
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErroResponse> handleFeignException(FeignException ex) {
+
+        ErroResponse resposta = new ErroResponse(
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Erro na consulta externa",
+                "Não foi possível consultar o serviço de CEP. Verifique o valor informado"
         );
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(resposta);

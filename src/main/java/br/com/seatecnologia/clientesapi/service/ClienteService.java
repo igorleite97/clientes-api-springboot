@@ -10,9 +10,11 @@ import br.com.seatecnologia.clientesapi.dto.response.ClienteResponseDTO;
 import br.com.seatecnologia.clientesapi.dto.response.EmailResponseDTO;
 import br.com.seatecnologia.clientesapi.dto.response.EnderecoResponseDTO;
 import br.com.seatecnologia.clientesapi.dto.response.TelefoneResponseDTO;
+import br.com.seatecnologia.clientesapi.exception.CepFormatoInvalidoException;
 import br.com.seatecnologia.clientesapi.exception.CepInvalidoException;
 import br.com.seatecnologia.clientesapi.exception.ClienteNaoEncontradoException;
 import br.com.seatecnologia.clientesapi.exception.CpfJaCadastradoException;
+import feign.FeignException;
 import br.com.seatecnologia.clientesapi.model.Cliente;
 import br.com.seatecnologia.clientesapi.model.Email;
 import br.com.seatecnologia.clientesapi.model.Endereco;
@@ -66,14 +68,27 @@ public class ClienteService {
     }
 
     /**
-     * Consulta de CEP exposta como endpoint público (GET /api/cep/{cep}).
+     * Consulta de CEP exposta como endpoint público (GET /api/clientes/cep/{cep}).
      * Útil para o front-end pré-preencher o formulário de endereço.
+     *
+     * Fluxo de tratamento de erros:
+     *   1. CEP com formato errado (≠ 8 dígitos) → CepFormatoInvalidoException → 400
+     *   2. ViaCEP retorna {"erro":"true"} (CEP não existe) → CepInvalidoException → 422
+     *   3. ViaCEP retorna HTTP 4xx/5xx (ex: 400 para CEP mal-formado) → FeignException
+     *      capturada aqui e traduzida para CepInvalidoException → 422
      */
     @Transactional(readOnly = true)
     public EnderecoResponseDTO consultarCep(String cep) {
         String cepLimpo = MascaraUtil.apenasDigitos(cep);
-        ViaCepResponseDTO viaCepResponse = viaCepClient.buscarPorCep(cepLimpo);
 
+        // Primeira barreira: se nem 8 dígitos tem, nem adianta chamar a ViaCEP
+        if (cepLimpo == null || cepLimpo.length() != 8) {
+            throw new CepFormatoInvalidoException(cep);
+        }
+
+        ViaCepResponseDTO viaCepResponse = chamarViaCep(cepLimpo, cep);
+
+        // Segunda barreira: ViaCEP respondeu 200 mas o CEP não existe
         if (viaCepResponse.isErro()) {
             throw new CepInvalidoException(cep);
         }
@@ -160,20 +175,23 @@ public class ClienteService {
      *   - Campos que o usuário deixou em branco → usamos o retorno da ViaCEP
      *
      * Isso implementa a regra: "o usuário pode alterar os dados que vieram do ViaCEP".
+     *
+     * O CEP já chega com 8 dígitos validados pelo @Pattern do EnderecoRequestDTO,
+     * então aqui só precisamos tratar erros da chamada HTTP em si.
      */
     private Endereco montarEndereco(EnderecoRequestDTO dto) {
         String cepLimpo = MascaraUtil.apenasDigitos(dto.getCep());
 
-        ViaCepResponseDTO viaCep = viaCepClient.buscarPorCep(cepLimpo);
+        ViaCepResponseDTO viaCep = chamarViaCep(cepLimpo, dto.getCep());
         if (viaCep.isErro()) {
             throw new CepInvalidoException(dto.getCep());
         }
 
         // Preferência para o valor do usuário; fallback para o retorno da ViaCEP
-        String logradouro  = StringUtils.hasText(dto.getLogradouro()) ? dto.getLogradouro()  : viaCep.getLogradouro();
-        String bairro      = StringUtils.hasText(dto.getBairro())     ? dto.getBairro()      : viaCep.getBairro();
-        String cidade      = StringUtils.hasText(dto.getCidade())      ? dto.getCidade()      : viaCep.getCidade();
-        String uf          = StringUtils.hasText(dto.getUf())          ? dto.getUf()          : viaCep.getUf();
+        String logradouro = StringUtils.hasText(dto.getLogradouro()) ? dto.getLogradouro() : viaCep.getLogradouro();
+        String bairro     = StringUtils.hasText(dto.getBairro())     ? dto.getBairro()     : viaCep.getBairro();
+        String cidade     = StringUtils.hasText(dto.getCidade())     ? dto.getCidade()     : viaCep.getCidade();
+        String uf         = StringUtils.hasText(dto.getUf())         ? dto.getUf()         : viaCep.getUf();
 
         return Endereco.builder()
                 .cep(cepLimpo)
@@ -183,6 +201,30 @@ public class ClienteService {
                 .cidade(cidade)
                 .uf(uf)
                 .build();
+    }
+
+    /**
+     * Encapsula a chamada ao Feign client com tratamento de erro centralizado.
+     *
+     * Por que centralizar aqui em vez de repetir try-catch em cada método?
+     * Porque tanto consultarCep() quanto montarEndereco() chamam a ViaCEP —
+     * ter o tratamento em um único lugar evita duplicação e garante
+     * comportamento consistente para qualquer chamada ao serviço externo.
+     *
+     * FeignException é lançada quando a ViaCEP retorna HTTP não-2xx.
+     * Isso acontece, por exemplo, quando o CEP tem 8 dígitos mas está
+     * em um formato que a ViaCEP não aceita.
+     * Nesse caso tratamos como "CEP inválido" → 422.
+     */
+    private ViaCepResponseDTO chamarViaCep(String cepLimpo, String cepOriginal) {
+        try {
+            return viaCepClient.buscarPorCep(cepLimpo);
+        } catch (FeignException e) {
+            // A ViaCEP respondeu com erro HTTP (ex: 400 para formato não aceito,
+            // ou 5xx se o serviço externo estiver fora do ar).
+            // Do ponto de vista do nosso cliente, o resultado é o mesmo: CEP inválido.
+            throw new CepInvalidoException(cepOriginal);
+        }
     }
 
     private void adicionarTelefones(Cliente cliente, List<TelefoneRequestDTO> dtos) {
