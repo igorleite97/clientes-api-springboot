@@ -110,8 +110,6 @@ A aplicação segue **Layered Architecture** — cada camada conhece apenas a im
 ### `spring.jpa.open-in-view=false`
 Definido **explicitamente** (o padrão do Spring Boot é `true`). Com OSIV ativo, as conexões do HikariPool ficam ocupadas durante toda a serialização da resposta HTTP. Com `false`, a conexão é liberada ao fim do `@Transactional` no Service — pool mais eficiente e arquitetura que se impõe: banco só dentro da camada transacional.
 
-### Dialect Hibernate removido
-A propriedade `spring.jpa.database-platform` foi **removida por design**. O Hibernate 6 usa `DialectDetector` para detectar o dialeto automaticamente pelo driver JDBC — configuração manual seria redundante e geraria o WARN `HHH90000025`. Resultado: log de startup 100% limpo.
 
 ### CSRF desabilitado por arquitetura
 CSRF explora sessões de browser. Esta API usa `SessionCreationPolicy.STATELESS` — sem sessão, sem cookie de autenticação. O header `Authorization` é enviado **explicitamente** em cada request pelo cliente. O vetor de ataque do CSRF não existe aqui. Manter o CSRF causaria erros no Swagger e Postman sem adicionar proteção real.
