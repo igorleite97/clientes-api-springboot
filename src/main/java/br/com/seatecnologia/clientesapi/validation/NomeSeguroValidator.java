@@ -22,7 +22,7 @@ public class NomeSeguroValidator implements ConstraintValidator<NomeSeguro, Stri
     @Override
     public boolean isValid(String nome, ConstraintValidatorContext context) {
         if (nome == null || nome.isBlank()) {
-            // @NotBlank já valida isso — aqui evitamos NullPointerException
+            // @NotBlank já cobre isso — retornamos true para não duplicar o erro
             return true;
         }
         return nome.matches(PADRAO_SEGURO);

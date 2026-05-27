@@ -20,7 +20,7 @@ public class CPFValidator implements ConstraintValidator<CPF, String> {
     @Override
     public boolean isValid(String cpf, ConstraintValidatorContext context) {
         if (cpf == null || cpf.isBlank()) {
-            // @NotBlank já cuida disso — aqui só evito NullPointerException
+            // @NotBlank já cobre isso — retornamos true para não duplicar o erro
             return true;
         }
 

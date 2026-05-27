@@ -8,9 +8,6 @@ import br.com.seatecnologia.clientesapi.model.TipoTelefone;
  * Regra de ouro do projeto:
  *   - REMOVE a máscara antes de persistir (só dígitos no banco)
  *   - APLICA a máscara ao montar o DTO de resposta
- *
- * Classe com construtor privado pois não faz sentido instanciar
- * todos os métodos são estáticos.
  */
 public final class MascaraUtil {
 

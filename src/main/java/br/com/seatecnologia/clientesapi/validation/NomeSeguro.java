@@ -11,8 +11,6 @@ import java.lang.annotation.Target;
 
 /**
  * Garante que o nome não contém caracteres maliciosos (XSS/injeção).
- *
- * Isso é uma das dicas de segurança do desafio
  */
 @Documented
 @Constraint(validatedBy = NomeSeguroValidator.class)

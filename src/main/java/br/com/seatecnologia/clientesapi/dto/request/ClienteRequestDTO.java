@@ -34,12 +34,11 @@ public class ClienteRequestDTO {
     @CPF
     private String cpf;
 
-    // @NotNull garante que o campo não seja omitido; @Valid propaga validação internamente
+    // @NotNull aqui é intencional: sem ele, um endereco null passaria pelo @Valid sem erro
     @NotNull(message = "Endereço é obrigatório")
     @Valid
     private EnderecoRequestDTO endereco;
 
-    // @NotEmpty garante ao menos um telefone; @Valid valida cada item da lista
     @NotEmpty(message = "Informe pelo menos um telefone")
     @Valid
     private List<TelefoneRequestDTO> telefones;

@@ -37,9 +37,6 @@ import java.util.List;
  *   3. Aplicar máscaras ao montar os DTOs de resposta
  *   4. Garantir unicidade de CPF
  *   5. Validar que o CEP existe de verdade
- *
- * @RequiredArgsConstructor gera o construtor com os campos final —
- * é a forma recomendada de injeção de dependências no Spring.
  */
 @Service
 @RequiredArgsConstructor

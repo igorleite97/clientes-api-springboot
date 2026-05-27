@@ -7,17 +7,12 @@ import java.util.Optional;
 
 /**
  * Repositório JPA para a entidade Cliente.
- *
- * O Spring Data gera a implementação em tempo de execução
- * não preciso escrever nenhuma query para os métodos básicos.
- *
- * Os métodos derivados (existsByCpf, findByCpf) são traduzidos
- * automaticamente para SQL pelo nome: "find By Cpf" → WHERE cpf = ?
  */
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-    // Usado antes de cadastrar para garantir CPF único
+    // Verificação rápida de unicidade antes de tentar persistir
     boolean existsByCpf(String cpf);
 
+    // Necessário no update: permite verificar se o CPF pertence a outro cliente
     Optional<Cliente> findByCpf(String cpf);
 }

@@ -8,11 +8,8 @@ import lombok.Setter;
 /**
  * DTO que mapeia exatamente o JSON que a API ViaCEP retorna.
  *
- * Os nomes dos campos seguem o padrão da ViaCEP (logradouro, bairro, etc.).
- * @JsonProperty só é necessário quando o nome do campo Java difere do JSON.
- *
  * Se o CEP não existir, a ViaCEP retorna: {"erro": "true"}
- * Por isso tenho o campo 'erro' aqui — uso ele no service para lançar exceção.
+ * Por isso tenho o campo 'erro' aqui — verificado em isErro() antes de prosseguir.
  */
 @Getter
 @Setter

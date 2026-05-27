@@ -10,14 +10,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Anotação customizada para validação de CPF.
- *
- * Como usar:
- *   @CPF
- *   private String cpf;
- *
- * Ela valida tanto o formato (11 dígitos) quanto o algoritmo matemático
- * que verifica se o CPF é matematicamente válido, não só se tem 11 números.
+ * Valida CPF pelo algoritmo matemático dos dois dígitos verificadores —
+ * não só o formato, mas se o número é de fato válido.
  */
 @Documented
 @Constraint(validatedBy = CPFValidator.class)
